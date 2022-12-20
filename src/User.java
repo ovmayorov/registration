@@ -1,9 +1,10 @@
+import java.io.Serializable;
 import java.util.Date;
 
-public class User {
-    String nickname;
-    String password;
-    Date registrationDate;
+public class User implements Serializable {
+    private String nickname;
+    private String password;
+    private Date registrationDate;
 
     public User(String nickname, String password) {
         this.nickname = nickname;

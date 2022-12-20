@@ -1,16 +1,44 @@
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class RegistrationSystem {
-    String fileName;
-    List<User> users = new ArrayList<>();
+public class RegistrationSystem implements Serializable {
+    private String fileName;
+    private List<User> users = new ArrayList<>();
 
-    public RegistrationSystem() {
+//    public RegistrationSystem() {
+//
+//    }
 
+    public List<User> getUsers() {
+        return users;
     }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    @Override
+    public String toString() {
+        return "RegistrationSystem{" +
+                "users=" + users +
+                '}';
+    }
+
     public RegistrationSystem(String fileName) {
-        this.fileName = fileName;
+        try(ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(fileName))){
+            List<User> users = (List<User>)objectInputStream.readObject();
+            setUsers(users);
+            //RegistrationSystem dbUsers = (RegistrationSystem)objectInputStream.readObject();
+        }
+        catch(IOException | ClassNotFoundException ex){
+            System.out.println(ex.getMessage());
+        }
+
+
+
+//        this.fileName = fileName;
     }
 
     public User login(String nickname, String password){
@@ -20,11 +48,13 @@ public class RegistrationSystem {
 
     public boolean register(String nickname, String password){
         for(int i=0; i<users.size(); i++){
-            if(users.get(i).getNickname().equals(nickname)){
+            String localNickname = users.get(i).getNickname();
+            String localPassword = users.get(i).getPassword();
+            if(localNickname.equals(nickname)){
                 System.out.println("Пользователь с таким именем уже существует.");
                 return false;
             }
-            if(users.get(i).getPassword().equals(password)){
+            if(localPassword.equals(password)){
                 System.out.println("Пароль слишком легко угадать. Придумайте другой пароль.");
                 return false;
             }
@@ -39,7 +69,5 @@ public class RegistrationSystem {
         return true;
     }
     
-    public void saveData(){
 
-    }
 }

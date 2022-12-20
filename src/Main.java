@@ -1,63 +1,49 @@
 import java.io.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         int menuIndex = 0;
-        RegistrationSystem dbUsers = new RegistrationSystem();
-        File usersFile = new File("usersdatabase.txt");
-        try(FileReader fileReader = new FileReader(usersFile);
-            BufferedReader buffer = new BufferedReader(fileReader)){
-            if(!usersFile.exists()){
-                System.out.println("В системе нет пользователей.");
-                //dbUsers = new RegistrationSystem();
-            }
-            else {
-                dbUsers = new RegistrationSystem("usersdatabase.txt");
-            }
-//                String line = "";
-//                int flag = 1;
-//                while((line=buffer.readLine())!=null){
-//                    switch(flag){
-//                        case 1:
-//                            String user = line;
-//                            flag = 2;
-//                            break;
-//                        case 2:
-//                            String pass = line;
-//                            flag = 3;
-//                            break;
-//                        case 3:
-//                            Date day = ;
-//                    }
-//
-//                }
+        RegistrationSystem dbUsers = new RegistrationSystem("usersdatabase.txt");
+        System.out.println(dbUsers);
+        //String usersFile = "usersdatabase.txt";
 
-
-
-        }
-        catch(FileNotFoundException ex){
-            System.out.println(ex.getMessage());
-        }
-        catch(IOException ex){
-            System.out.println(ex.getMessage());
-        }
-
+//        try(FileReader fileReader = new FileReader("usersdatabase.bin");
+//            BufferedReader buffer = new BufferedReader(fileReader)){
+//            if(buffer==null){
+//                System.out.println("В системе нет пользователей.");
+//                //dbUsers = new RegistrationSystem();
+//            }
+//            else {
+//                dbUsers = new RegistrationSystem();
+//            }
+//        }
+//        catch(FileNotFoundException ex){
+//            System.out.println(ex.getMessage());
+//        }
+//        catch(IOException ex){
+//            System.out.println(ex.getMessage());
+//        }
+        //System.out.println(dbUsers.getUsers().get(0).getNickname());
 
         start(dbUsers);
-        System.out.println("Продолжить: Введите 1\n" +
-                           "Для выхода: Введите 0"  );
-        menuIndex = scan.nextInt();
-        if(menuIndex == 1){
-            start(dbUsers);
-        }
-        else if(menuIndex == 0){
-            dbUsers.saveData();
-        }
 
+
+//        System.out.println("Продолжить: Введите 1\n" +
+//                           "Для выхода: Введите 0"  );
+//        menuIndex = scan.nextInt();
+//        if(menuIndex == 1){
+//            start(dbUsers);
+//        }
+//        else if(menuIndex == 0){
+//            saveData(dbUsers, "usersdatabase.bin" );
+//        }
+        saveData(dbUsers, "usersdatabase.txt" );
         System.out.println("Работа программы завершена.");
 
 
@@ -87,19 +73,20 @@ public class Main {
                 System.out.println("Регистрация нового пользователя");
                 System.out.println("Введите логин: ");
                 String nickname1 = S.nextLine();
-                S.nextInt();
+                S.next();
                 System.out.println("Введите пароль: ");
-                S.nextInt();
+                S.next();
                 String password1 = S.nextLine();
 
                 if(dbUsers.register(nickname1,password1)){
                    System.out.println("Новый пользователь успешно добавлен. ");
                 }
-
+                start(dbUsers);
                 break;
             case 3:
+                saveData(dbUsers, "usersdatabase.txt" );
                 System.out.println("Выход из программы.");
-                dbUsers.saveData();
+                break;
 
         }
 
@@ -107,4 +94,19 @@ public class Main {
 
     }
 
+    public static void saveData(RegistrationSystem dbUsers, String usersFile){
+//        try(FileOutputStream fileOutputStream  = new FileOutputStream("usersdatabase.txt");
+//            ObjectOutputStream objectOutputStream  = new ObjectOutputStream(fileOutputStream)){
+        try(ObjectOutputStream objectOutputStream  = new ObjectOutputStream(
+                new FileOutputStream(usersFile))){
+            List<User> users = dbUsers.getUsers();
+//            for(int i=0; i<users.size(); i++) {
+//                objectOutputStream.writeObject(users.get(i));
+//            }
+            objectOutputStream.writeObject(users);
+        }
+        catch(IOException ex){
+            System.out.println(ex.getMessage());
+        }
+    }
 }
