@@ -10,6 +10,11 @@ public class User {
         this.password = password;
         this.registrationDate = new Date();
     }
+    public User(String nickname, String password, Date registrationDate) {
+        this.nickname = nickname;
+        this.password = password;
+        this.registrationDate = registrationDate;
+    }
 
     public String getNickname() {
         return nickname;
