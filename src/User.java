@@ -1,7 +1,7 @@
 import java.io.Serializable;
 import java.util.Date;
 
-public class User implements Serializable {
+public class User implements Serializable{
     private String nickname;
     private String password;
     private Date registrationDate;
@@ -11,6 +11,16 @@ public class User implements Serializable {
         this.password = password;
         this.registrationDate = new Date();
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "nickname='" + nickname + '\'' +
+                ", password='" + password + '\'' +
+                ", registrationDate=" + registrationDate +
+                '}';
+    }
+
     public User(String nickname, String password, Date registrationDate) {
         this.nickname = nickname;
         this.password = password;

@@ -7,43 +7,13 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
-        int menuIndex = 0;
-        RegistrationSystem dbUsers = new RegistrationSystem("usersdatabase.txt");
-        System.out.println(dbUsers);
-        //String usersFile = "usersdatabase.txt";
 
-//        try(FileReader fileReader = new FileReader("usersdatabase.bin");
-//            BufferedReader buffer = new BufferedReader(fileReader)){
-//            if(buffer==null){
-//                System.out.println("В системе нет пользователей.");
-//                //dbUsers = new RegistrationSystem();
-//            }
-//            else {
-//                dbUsers = new RegistrationSystem();
-//            }
-//        }
-//        catch(FileNotFoundException ex){
-//            System.out.println(ex.getMessage());
-//        }
-//        catch(IOException ex){
-//            System.out.println(ex.getMessage());
-//        }
-        //System.out.println(dbUsers.getUsers().get(0).getNickname());
+        RegistrationSystem dbUsers = new RegistrationSystem("usersdatabase.txt");
+        System.out.println(dbUsers.getUsers());
 
         start(dbUsers);
 
-
-//        System.out.println("Продолжить: Введите 1\n" +
-//                           "Для выхода: Введите 0"  );
-//        menuIndex = scan.nextInt();
-//        if(menuIndex == 1){
-//            start(dbUsers);
-//        }
-//        else if(menuIndex == 0){
-//            saveData(dbUsers, "usersdatabase.bin" );
-//        }
-        saveData(dbUsers, "usersdatabase.txt" );
+        dbUsers.saveData();
         System.out.println("Работа программы завершена.");
 
 
@@ -55,7 +25,8 @@ public class Main {
         //•	Должно быть 3 пункта меню. Авторизация, регистрация, выход из программы.
         Scanner S = new Scanner(System.in);
         int choice;
-
+        String nickname1 = "";
+        String password1 = "";
         System.out.println("Авторизируйтесь или зарегистрируйтесь:");
         System.out.println("Введите:");
         System.out.println("1  - Для Авторизации");
@@ -63,50 +34,36 @@ public class Main {
         System.out.println("3  - Для Выхода из программы");
 
         choice = S.nextInt();
+
         switch (choice) {
             case 1:
                 System.out.println("Вход в систему");
                 System.out.println("Введите логин: ");
+                nickname1 = S.next();
                 System.out.println("Введите пароль: ");
+                password1 = S.next();
+                System.out.println("Пользователь "+dbUsers.login(nickname1,password1)+" авторизовался успешно.");
+                start(dbUsers);
                 break;
             case 2:
                 System.out.println("Регистрация нового пользователя");
                 System.out.println("Введите логин: ");
-                String nickname1 = S.nextLine();
-                S.next();
+                nickname1 = S.next();
                 System.out.println("Введите пароль: ");
-                S.next();
-                String password1 = S.nextLine();
-
+                password1 = S.next();
+                System.out.println("Вы ввели: "+nickname1 +" "+password1);
                 if(dbUsers.register(nickname1,password1)){
                    System.out.println("Новый пользователь успешно добавлен. ");
                 }
                 start(dbUsers);
                 break;
             case 3:
-                saveData(dbUsers, "usersdatabase.txt" );
+                //saveData(dbUsers.getUsers(), "usersdatabase.txt" );
+                dbUsers.saveData();
                 System.out.println("Выход из программы.");
                 break;
-
-        }
-
-
-
-    }
-
-    public static void saveData(RegistrationSystem dbUsers, String usersFile){
-//        try(FileOutputStream fileOutputStream  = new FileOutputStream("usersdatabase.txt");
-//            ObjectOutputStream objectOutputStream  = new ObjectOutputStream(fileOutputStream)){
-        try(ObjectOutputStream objectOutputStream  = new ObjectOutputStream(
-                new FileOutputStream(usersFile))){
-            List<User> users = dbUsers.getUsers();
-//            for(int i=0; i<users.size(); i++) {
-//                objectOutputStream.writeObject(users.get(i));
-//            }
-            objectOutputStream.writeObject(users);
-        }
-        catch(IOException ex){
-            System.out.println(ex.getMessage());
         }
     }
+
+
 }

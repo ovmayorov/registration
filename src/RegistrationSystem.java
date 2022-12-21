@@ -7,9 +7,21 @@ public class RegistrationSystem implements Serializable {
     private String fileName;
     private List<User> users = new ArrayList<>();
 
-//    public RegistrationSystem() {
-//
-//    }
+
+
+
+
+    public RegistrationSystem(String fileName) {
+        this.fileName = fileName;
+        try(ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(fileName))){
+            List<User> users = (List<User>)objectInputStream.readObject();
+            setUsers(users);
+            //RegistrationSystem dbUsers = (RegistrationSystem)objectInputStream.readObject();
+        }
+        catch(IOException | ClassNotFoundException ex){
+            System.out.println(ex.getMessage());
+        }
+    }
 
     public List<User> getUsers() {
         return users;
@@ -26,23 +38,15 @@ public class RegistrationSystem implements Serializable {
                 '}';
     }
 
-    public RegistrationSystem(String fileName) {
-        try(ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(fileName))){
-            List<User> users = (List<User>)objectInputStream.readObject();
-            setUsers(users);
-            //RegistrationSystem dbUsers = (RegistrationSystem)objectInputStream.readObject();
-        }
-        catch(IOException | ClassNotFoundException ex){
-            System.out.println(ex.getMessage());
-        }
-
-
-
-//        this.fileName = fileName;
-    }
-
     public User login(String nickname, String password){
-
+        for(int i=0; i<users.size(); i++) {
+            String localNickname = users.get(i).getNickname();
+            String localPassword = users.get(i).getPassword();
+            if (localNickname.equals(nickname) && localPassword.equals(password)) {
+                return users.get(i);
+            }
+        }
+        System.out.println("ѕользователь с таким логином и паролем не найден. ");
         return null;
     }
 
@@ -59,15 +63,18 @@ public class RegistrationSystem implements Serializable {
                 return false;
             }
         }
-//        public User(String nickname, String password) {
-//            this.nickname = nickname;
-//            this.password = password;
-//            this.registrationDate = new Date();
-//        }
 
         users.add(new User(nickname,password));
         return true;
     }
-    
+    public void saveData(){
+           try(ObjectOutputStream objectOutputStream  = new ObjectOutputStream(
+                new FileOutputStream(this.fileName))){
+               objectOutputStream.writeObject(this.users);
+        }
+        catch(IOException ex){
+            System.out.println(ex.getMessage());
+        }
+    }
 
 }
