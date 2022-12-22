@@ -46,7 +46,7 @@ public class RegistrationSystem implements Serializable {
                 return users.get(i);
             }
         }
-        System.out.println("ѕользователь с таким логином и паролем не найден. ");
+
         return null;
     }
 
@@ -55,7 +55,7 @@ public class RegistrationSystem implements Serializable {
             String localNickname = users.get(i).getNickname();
             String localPassword = users.get(i).getPassword();
             if(localNickname.equals(nickname)){
-                System.out.println("ѕользователь с таким именем уже существует.");
+                System.out.println("“акой пользователь уже существует.");
                 return false;
             }
             if(localPassword.equals(password)){

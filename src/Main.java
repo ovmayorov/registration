@@ -42,7 +42,12 @@ public class Main {
                 nickname1 = S.next();
                 System.out.println("Введите пароль: ");
                 password1 = S.next();
-                System.out.println("Пользователь "+dbUsers.login(nickname1,password1)+" авторизовался успешно.");
+                if(dbUsers.login(nickname1,password1)!=null ) {
+                    System.out.println("Вы успешно авторизованы.");
+                }
+                else{
+                    System.out.println("Неверный логин или пароль. ");
+                }
                 start(dbUsers);
                 break;
             case 2:
@@ -53,8 +58,9 @@ public class Main {
                 password1 = S.next();
                 System.out.println("Вы ввели: "+nickname1 +" "+password1);
                 if(dbUsers.register(nickname1,password1)){
-                   System.out.println("Новый пользователь успешно добавлен. ");
+                   System.out.println("Вы успешно зарегистрировались!. ");
                 }
+                //Такой пользователь уже существует
                 start(dbUsers);
                 break;
             case 3:
